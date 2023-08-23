@@ -146,6 +146,31 @@ public class CompletableFutureTest {
         System.out.println("222222222222222");
     }
 
+
+    @Test
+    void thenCompose() throws ExecutionException, InterruptedException {
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("1st Future Completed!");
+            return "Hello9";
+        }).thenCompose(s -> CompletableFuture.supplyAsync(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("2nd Future Completed!");
+            return s + " World!";
+        }));
+
+        System.out.println(future.get());
+    }
+
+
     private <T> T getSomeDB(T data) {
         System.out.println("함수 시작");
         try {
